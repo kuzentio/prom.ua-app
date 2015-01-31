@@ -6,14 +6,18 @@
 </head>
 <body>
 
-    <p>Registration</p>
+    <form method="POST">
+        <p>Registration</p>
     {% for field in form %}
         {{ field.label }} {{ field }}<br>
     {% endfor %}
     <br>
-        {{ errors }}
+    {% for key, value in errors.items() %}
+        {{ key }} : {{ value }} <br>
+    {% endfor %}
     <br>
-    <input type="submit">
+    <input type="submit" value="Registration">
+    </form>
 
 </body>
 </html>
