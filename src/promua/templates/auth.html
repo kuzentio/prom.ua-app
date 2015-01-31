@@ -14,9 +14,10 @@
     {% endfor %}
         <br>
     {% for key, value in errors.items() %}
-
-        {{ key }} : {{ value }} <br>
-
+        {{ key }} : {{ value }}
+            {% if key == 'username'%}
+                <a href="/registration/"> registration</a><br>
+            {%endif%}
     {% endfor %}
         <input type="submit">
     </form>

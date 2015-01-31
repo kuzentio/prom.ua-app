@@ -23,13 +23,13 @@ class AuthorizationForm(Form):
     password = PasswordField("Password")
 
     def validate(self):
+        user = models.Users.query.filter_by(username=self.username.data).first()
         if not Form.validate(self):
             return False
-        user = models.Users.query.filter_by(username=self.username.data).first()
         if not user:
-            self.username.errors = "You enter incorrect username."
+            self.username.errors = "We don't know about %s, you can" %self.username.data
             return False
-        elif self.password.data != hashlib.sha224(user.password + user.salt).hexdigest():
+        elif user.password != hashlib.sha224(unicode(self.password.data) + user.salt).hexdigest():
             self.password.errors = "Enter correct username of password."
             return False
         return True
