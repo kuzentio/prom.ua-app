@@ -1,20 +1,28 @@
+from flask import request, redirect, render_template, make_response
 import hashlib
 from promua.app import app
-from flask import request, redirect, render_template, make_response
-from promua.forms import UserForm, AuthorizationForm
+from promua.forms import AuthorizationForm, RegistrationForm
 from promua import models
 from promua.models import db
-from promua import utils
+from utils import utils
 
 
 @app.route('/', methods=['GET'])
 def main():
-    assert False, 123
+    records = db.session.query(models.Questions, models.Users).join(models.Users, models.Questions.who_ask_id == models.Users.id).all()
+    return render_template("main.html", records=records)
+
+
+@app.route('/questions/<int:question_id>/', methods=['GET'])
+def questions(question_id):
+
+    return render_template("questions.html", question_id=question_id)
+
 
 @app.route('/registration/', methods=['GET', 'POST'])
 def registration():
     errors = {}
-    form = UserForm(request.form)
+    form = RegistrationForm(request.form)
     if request.method == 'POST' and not form.validate():
         return render_template("registration.html", form=form, errors=form.errors)
 

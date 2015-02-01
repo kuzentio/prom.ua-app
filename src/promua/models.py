@@ -34,6 +34,7 @@ class Questions(db.Model):
 
 class Answers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    who_response_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey("questions.id", ondelete='CASCADE'), nullable=False)
     text_answer = db.Column(db.String(200))
 

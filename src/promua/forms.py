@@ -3,7 +3,7 @@ from wtforms import Form, StringField, PasswordField, validators, TextField
 from promua import models
 
 
-class UserForm(Form):
+class RegistrationForm(Form):
     username = StringField("Username", [validators.Length(min=4, max=20)])
     password = PasswordField("Password")
     email = StringField("E-Mail", [validators.Length(min=5)])

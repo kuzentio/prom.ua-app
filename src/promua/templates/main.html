@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p>Main Page</p>
+    {% for record in records %}
+        <li>{{record.Users.username}} : <a href="/questions/{{ record.Questions.id }}/">{{record.Questions.text_question}} </a>
+    {% endfor %}
+
+
+</body>
+</html>
