@@ -15,8 +15,13 @@ def main():
 
 @app.route('/questions/<int:question_id>/', methods=['GET'])
 def questions(question_id):
+    question = models.Questions.query.get(question_id)
+    answers = db.session.query(models.Answers, models.Users).\
+        filter_by(question_id=question_id).\
+        join(models.Users, models.Answers.who_response_id == models.Users.id).all()
 
-    return render_template("questions.html", question_id=question_id)
+
+    return render_template("questions.html", question=question, answers=answers)
 
 
 @app.route('/registration/', methods=['GET', 'POST'])
