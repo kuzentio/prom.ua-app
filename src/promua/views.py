@@ -9,8 +9,8 @@ from utils import utils
 
 @app.route('/', methods=['GET'])
 def main():
-    records = db.session.query(models.Questions, models.Users).join(models.Users, models.Questions.who_ask_id == models.Users.id).all()
-    return render_template("main.html", records=records)
+    questions = db.session.query(models.Questions, models.Users).join(models.Users, models.Questions.who_ask_id == models.Users.id).all()
+    return render_template("main.html", questions=questions)
 
 
 @app.route('/questions/<int:question_id>/', methods=['GET'])
@@ -21,17 +21,16 @@ def questions(question_id):
         join(models.Users, models.Answers.who_response_id == models.Users.id).all()
 
 
-    return render_template("questions.html", question=question, answers=answers)
+    return render_template("question.html", question=question, answers=answers)
 
 
 @app.route('/registration/', methods=['GET', 'POST'])
 def registration():
     errors = {}
     form = RegistrationForm(request.form)
-    if request.method == 'POST' and not form.validate():
-        return render_template("registration.html", form=form, errors=form.errors)
-
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
+        if not form.validate():
+            return render_template("registration.html", form=form, errors=form.errors)
         salt = utils.random_string(5)
         password = hashlib.sha224(form.password.data + salt).hexdigest()
         user = models.Users(username=form.username.data, password=password, salt=salt, email=form.email.data)
@@ -54,10 +53,9 @@ def registration():
 def authorization():
     errors = {}
     form = AuthorizationForm(request.form)
-    if request.method == 'POST' and not form.validate():
-        return render_template("auth.html", form=form, errors=form.errors)
-
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
+        if not form.validate():
+            return render_template("auth.html", form=form, errors=form.errors)
         user = models.Users.query.filter_by(username=form.username.data).first()
         user_session = models.Sessions(session_id=utils.random_string(20), user_id=user.id)
         response = make_response(redirect('/'))
