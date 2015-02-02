@@ -18,18 +18,24 @@ def main():
             db.session.commit()
             return redirect('/')
 
-        return render_template("main.html", questions=questions, active=True)
-    return render_template("main.html", questions=questions, active=False)
+        return render_template("main.html", questions=questions, user_active=True)
+    return render_template("main.html", questions=questions, user_active=False)
 
 
-@app.route('/questions/<int:question_id>/', methods=['GET'])
+@app.route('/question/<int:question_id>/', methods=['GET', 'POST'])
 def questions(question_id):
     question = models.Questions.query.get(question_id)
     answers = db.session.query(models.Answers, models.Users).\
         filter_by(question_id=question_id).\
         join(models.Users, models.Answers.who_response_id == models.Users.id).all()
-
-
+    if 'session_id' in request.cookies and request.cookies['session_id'] == models.Sessions.query.filter_by(session_id=request.cookies['session_id']).first().session_id:
+        session = models.Sessions.query.filter_by(session_id=request.cookies['session_id'])
+        if request.method == 'POST':
+            answer = models.Answers(who_response_id=session[0].user_id, question_id=question_id, text_answer=request.form['answer'])
+            db.session.add(answer)
+            db.session.commit()
+            return redirect('/question/%s/' % question_id)
+        return render_template("question.html", question=question, answers=answers, user_active=True)
     return render_template("question.html", question=question, answers=answers)
 
 

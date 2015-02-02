@@ -5,9 +5,33 @@
 </head>
 <body>
         <p>Question: {{ question.text_question }}</p>
+
         {% for answer in answers %}
             <li>{{ answer.Users.username }} : {{ answer.Answers.text_answer }} </li>
         {% endfor %}
+
+        {% if user_active %}
+            <form method="POST">
+                <p>Enter Answer</p>
+                <input type="text" name="answer">
+                <input type="submit">
+            </form>
+        {% endif %}
+
+        {% if not user_active %}
+            <form method="GET" action="/registration/">
+                <input type="submit" value="Registration">
+            </form>
+            <form method="GET" action="/auth/">
+                <input type="submit" value="Sing in">
+            </form>
+        {% endif %}
+
+            <form method="GET" action='/'>
+                <input type="submit" value="Main page">
+            </form>
+
+
 
 </body>
 </html>

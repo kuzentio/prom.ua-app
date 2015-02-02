@@ -6,18 +6,19 @@
 <body>
     <p> Authorization </p>
     <form method="POST">
-    {% for field in form %}
+        {% for field in form %}
+            <br>{{ field.label }} : {{ field }}
+        {% endfor %}
 
-        <br>{{ field.label }} : {{ field }}
-
-    {% endfor %}
         <br>
-    {% for key, value in errors.items() %}
-        {{ key }} : {{ value }}
-            {% if key == 'username'%}
-                <a href="/registration/"> registration</a><br>
-            {%endif%}
-    {% endfor %}
+
+        {% for key, value in errors.items() %}
+            {{ key }} : {{ value }}
+                {% if key == 'username'%}
+                    <a href="/registration/"> registration</a><br>
+                {%endif%}
+        {% endfor %}
+
         <input type="submit">
     </form>
 </body>
