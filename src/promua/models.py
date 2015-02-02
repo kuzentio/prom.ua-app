@@ -12,6 +12,18 @@ class Users(db.Model):
     salt = db.Column(db.String(10))
     email = db.Column(db.String(20), unique=True)
 
+    def get_id(self):
+        return unicode(self.id)
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
 
 class Sessions(db.Model):
     id = db.Column(db.Integer, primary_key=True)

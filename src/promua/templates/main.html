@@ -15,14 +15,18 @@
             <input type="submit" value="Registration">
        </form>
         <form method="GET" action="/auth/">
-            <input type="submit" value="Sing in">
+            <input type="submit" value="Authorization">
        </form>
     {% endif %}
+
     {% if user_active %}
         <form method="POST">
             <p>Make question - </p>
             <input type="text" name="question">
             <input type="submit">
+        </form>
+        <form method="GET" action="/exit/">
+            <input type="submit" value="Exit">
         </form>
     {% endif %}
 
