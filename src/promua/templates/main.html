@@ -6,9 +6,25 @@
 <body>
     <p>Main Page</p>
     {% for question in questions %}
-        <li>{{question.Users.username}} : <a href="/questions/{{ question.Questions.id }}/">{{question.Questions.text_question}} </a>
+        <li>{{question.Users.username}} : <a href="/questions/{{ question.Questions.id }}/">{{question.Questions.text_question}} </a></li>
     {% endfor %}
+        <br>
 
+    {% if not active %}
+       <form method="GET" action="/registration/">
+            <input type="submit" value="Registration">
+       </form>
+        <form method="GET" action="/auth/">
+            <input type="submit" value="Sing in">
+       </form>
+    {% endif %}
+    {% if active %}
+        <form method="POST">
+            <p>Make question - </p>
+            <input type="text" name="question">
+            <input type="submit">
+        </form>
+    {% endif %}
 
 </body>
 </html>

@@ -12,18 +12,11 @@ class Users(db.Model):
     salt = db.Column(db.String(10))
     email = db.Column(db.String(20), unique=True)
 
-    #def __init__(self, username, email):
-    #    self.username = username
-    #    self.email = email
-
-
-    #def __repr__(self):
-    #    return '<User %r>' % self.username
 
 class Sessions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'), nullable=False)
-    session_id = db.Column(db.Integer, nullable=False)
+    session_id = db.Column(db.String(20), nullable=False, unique=True)
 
 
 class Questions(db.Model):
