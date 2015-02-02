@@ -10,14 +10,13 @@ from utils import utils
 @app.route('/', methods=['GET', 'POST'])
 def main():
     questions = db.session.query(models.Questions, models.Users).join(models.Users, models.Questions.who_ask_id == models.Users.id).all()
-    if 'session_id' in request.cookies:
+    if 'session_id' in request.cookies and request.cookies['session_id'] == models.Sessions.query.filter_by(session_id=request.cookies['session_id']).first().session_id:
         session = models.Sessions.query.filter_by(session_id=request.cookies['session_id'])
-        if session:
-            if request.method == 'POST':
-                question = models.Questions(who_ask_id=session[0].user_id, text_question=request.form['question'])
-                db.session.add(question)
-                db.session.commit()
-                return redirect('/')
+        if request.method == 'POST':
+            question = models.Questions(who_ask_id=session[0].user_id, text_question=request.form['question'])
+            db.session.add(question)
+            db.session.commit()
+            return redirect('/')
 
         return render_template("main.html", questions=questions, active=True)
     return render_template("main.html", questions=questions, active=False)
