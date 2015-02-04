@@ -1,8 +1,7 @@
 import hashlib
+
 from wtforms import Form, StringField, PasswordField, validators, TextField
-from promua import models
-from promua.models import db
-from utils import utils
+from promua import models, utils
 
 
 class RegistrationForm(Form):
@@ -20,6 +19,7 @@ class RegistrationForm(Form):
             return False
         return True
 
+
 class AuthorizationForm(Form):
     username = StringField("Username")
     password = PasswordField("Password")
@@ -35,8 +35,3 @@ class AuthorizationForm(Form):
             self.password.errors = "Enter correct username of password."
             return False
         return True
-
-
-
-
-

@@ -4,7 +4,9 @@
     <title></title>
 </head>
 <body>
-
+    {% extends "base.html" %}
+        {% block title %} Example page!!! {% endblock %}
+    {% block content %}
     <form method="POST">
         <p>Registration</p>
     {% for field in form %}
@@ -17,6 +19,7 @@
     <br>
     <input type="submit" value="Registration">
     </form>
+    {% endblock %}
 
 </body>
 </html>

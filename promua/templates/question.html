@@ -19,15 +19,15 @@
         });
     });
     </script>
-        {% if user_active %}
-                {% for answer in answers %}
-                    <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }} ({{ answer.Answers.votes }})
-                        {% if user_active %}
-                            | vote <input type="checkbox" class="send-vote" >
-                        {% endif %}
-                    </li>
-                {% endfor %}
-                <p>Enter Answer</p>
+
+        {% if user.is_authenticated() %}
+            {% for answer in answers %}
+                <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }} ({{ answer.Answers.votes }})
+                    | vote <input type="checkbox" class="send-vote" {% if answer.Answers.id in voted_answers %}checked{% endif %}>
+                </li>
+            {% endfor %}
+
+            <p>Enter Answer</p>
 
             <form method="POST" id="send-form">
                 <input type="text" name="answer">
@@ -38,9 +38,7 @@
                 <input type="submit" value="Exit">
             </form>
 
-        {% endif %}
-
-        {% if not user_active %}
+        {% else %}
             <form method="GET" action="/registration/">
                 <input type="submit" value="Registration">
             </form>
@@ -49,8 +47,8 @@
             </form>
         {% endif %}
 
-            <form method="GET" action='/'>
-                <input type="submit" value="Main page">
-            </form>
+        <form method="GET" action='/'>
+            <input type="submit" value="Main page">
+        </form>
 </body>
 </html>

@@ -1,11 +1,12 @@
 import hashlib
+
 from flask import request, redirect, render_template, make_response, jsonify
 from flask.ext.login import login_user, current_user, logout_user, login_required
+
+from promua import models, utils
 from promua.app import app, login_manager
 from promua.forms import AuthorizationForm, RegistrationForm
-from promua import models
 from promua.models import db
-from utils import utils
 
 
 @login_manager.user_loader
@@ -28,6 +29,15 @@ def main():
 
 @app.route('/question/<int:question_id>/', methods=['GET', 'POST'])
 def questions(question_id):
+    if request.method == 'POST':
+        if not current_user.is_authenticated():
+            raise Exception('Forbidden')
+
+        answer = models.Answers(who_response_id=current_user.id, question_id=question_id, text_answer=request.form['answer'])
+        db.session.add(answer)
+        db.session.commit()
+        return redirect('/question/%s/' % question_id)
+
     question = models.Questions.query.get(question_id)
 
     answers = db.session.query(
@@ -39,14 +49,25 @@ def questions(question_id):
         models.Users,
     ).all()
 
+    voted_answers = []
+
     if current_user.is_authenticated():
-        if request.method == 'POST':
-            answer = models.Answers(who_response_id=current_user.id, question_id=question_id, text_answer=request.form['answer'])
-            db.session.add(answer)
-            db.session.commit()
-            return redirect('/question/%s/' % question_id)
-        return render_template("question.html", question=question, answers=answers, user_active=True)
-    return render_template("question.html", question=question, answers=answers)
+        query = db.session.query(
+            models.Votes
+        ).filter(
+            models.Votes.answer_id.in_([a.Answers.id for a in answers]),
+        ).filter_by(
+            user_id=current_user.id,
+        )
+        voted_answers = [a[0] for a in query.values('answer_id')]
+
+    return render_template(
+        "question.html",
+        user=current_user,
+        question=question,
+        answers=answers,
+        voted_answers=voted_answers,
+    )
 
 
 @app.route('/answers/<int:answer_id>/vote/', methods=['POST'])
@@ -101,4 +122,3 @@ def authorization():
 def exit():
     logout_user()
     return redirect('/')
-
