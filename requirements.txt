@@ -3,3 +3,4 @@ WTForms==2.0.2
 Flask-Login==0.2.11
 gunicorn==19.0.0
 ipdb==0.8
+psycopg2==2.5.4
