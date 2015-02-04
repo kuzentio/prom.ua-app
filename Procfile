@@ -1,1 +1,1 @@
-web: gunicorn==19.0.0 --log-file -
+web: gunicorn wsgi:app --log-file -
