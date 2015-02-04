@@ -6,13 +6,30 @@
 <body>
         <p>Question: {{ question.text_question }}</p>
 
-        {% for answer in answers %}
-            <li>{{ answer.Users.username }} : {{ answer.Answers.text_answer }} </li>
-        {% endfor %}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"> </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('.send-vote').click(function(e){
+            var thisCheck = $(this),
+                answerId = $(e.currentTarget).parent().data('answer_id');
 
+            if ( thisCheck.is(':checked') ){
+                $.post('/answers/'+answerId+'/vote/');
+            }
+        });
+    });
+    </script>
         {% if user_active %}
-            <form method="POST">
+                {% for answer in answers %}
+                    <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }} ({{ answer.Answers.votes }})
+                        {% if user_active %}
+                            | vote <input type="checkbox" class="send-vote" >
+                        {% endif %}
+                    </li>
+                {% endfor %}
                 <p>Enter Answer</p>
+
+            <form method="POST" id="send-form">
                 <input type="text" name="answer">
                 <input type="submit">
             </form>
@@ -28,15 +45,12 @@
                 <input type="submit" value="Registration">
             </form>
             <form method="GET" action="/auth/">
-                <input type="submit" value="Sing in">
+                <input type="submit" value="Authorization">
             </form>
         {% endif %}
 
             <form method="GET" action='/'>
                 <input type="submit" value="Main page">
             </form>
-
-
-
 </body>
 </html>

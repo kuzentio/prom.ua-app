@@ -42,10 +42,10 @@ class Answers(db.Model):
     who_response_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey("questions.id", ondelete='CASCADE'), nullable=False)
     text_answer = db.Column(db.String(200))
+    votes = db.Column(db.Integer, default=0)
 
 
 class Votes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'), nullable=False)
-    question_id = db.Column(db.Integer, db.ForeignKey("questions.id", ondelete='CASCADE'), nullable=False)
-
+    answer_id = db.Column(db.Integer, db.ForeignKey("answers.id", ondelete='CASCADE'), nullable=False)

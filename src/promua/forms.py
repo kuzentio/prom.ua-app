@@ -1,6 +1,8 @@
 import hashlib
 from wtforms import Form, StringField, PasswordField, validators, TextField
 from promua import models
+from promua.models import db
+from utils import utils
 
 
 class RegistrationForm(Form):
