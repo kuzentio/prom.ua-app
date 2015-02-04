@@ -1,3 +1,0 @@
--r common.txt
-
-ipdb==0.8
