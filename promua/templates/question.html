@@ -46,6 +46,10 @@
             </form>
 
         {% else %}
+            {% for answer in answers %}
+                <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }}
+                (<span class="count_votes">{{ answer.Answers.votes }}</span>)
+            {% endfor %}
             <form method="GET" action="/registration/">
                 <input type="submit" value="Registration">
             </form>
