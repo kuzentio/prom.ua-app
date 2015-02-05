@@ -32,7 +32,6 @@ def questions(question_id):
     if request.method == 'POST':
         if not current_user.is_authenticated():
             raise Exception('Forbidden')
-        import ipdb; ipdb.set_trace()
         answer = models.Answers(who_response_id=current_user.id, question_id=question_id, text_answer=request.form['answer'])
         db.session.add(answer)
         db.session.commit()
