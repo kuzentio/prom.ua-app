@@ -8,13 +8,19 @@
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"> </script>
     <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function(e) {
+        $("input:checkbox:checked").attr("disabled", true);
+
         $('.send-vote').click(function(e){
             var thisCheck = $(this),
                 answerId = $(e.currentTarget).parent().data('answer_id');
 
+            $(e.currentTarget).attr("disabled", true);
+
             if ( thisCheck.is(':checked') ){
                 $.post('/answers/'+answerId+'/vote/');
+                    var vote_val = $(e.currentTarget).parent().find('span.count_votes');
+                    vote_val.html(parseInt(vote_val.text()) + 1);
             }
         });
     });
@@ -22,7 +28,8 @@
 
         {% if user.is_authenticated() %}
             {% for answer in answers %}
-                <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }} ({{ answer.Answers.votes }})
+                <li data-answer_id="{{ answer.Answers.id }}">{{ answer.Users.username }} : {{ answer.Answers.text_answer }}
+                    (<span class="count_votes">{{ answer.Answers.votes }}</span>)
                     | vote <input type="checkbox" class="send-vote" {% if answer.Answers.id in voted_answers %}checked{% endif %}>
                 </li>
             {% endfor %}
