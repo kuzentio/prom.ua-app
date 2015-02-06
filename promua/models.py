@@ -1,4 +1,5 @@
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 from promua.app import app
@@ -12,8 +13,8 @@ class Users(db.Model):
     password = db.Column(db.String(80))
     salt = db.Column(db.String(10))
     email = db.Column(db.String(20), unique=True)
-    Questions = db.relationship('Questions', backref='users')
-    Answers = db.relationship('Answers', backref='users')
+    question = relationship('Questions', backref="user")
+    answer = relationship('Answers', backref="user")
 
     def get_id(self):
         return unicode(self.id)
@@ -28,28 +29,22 @@ class Users(db.Model):
         return True
 
 
-class Sessions(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    session_id = db.Column(db.String(20), nullable=False, unique=True)
-
-
 class Questions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    who_ask_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    who_ask_id = db.Column(db.Integer, ForeignKey("users.id"))
     text_question = db.Column(db.String(100))
-    answer = db.relationship("Answers")
+    answer = relationship("Answers", backref="questions")
 
 
 class Answers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    who_response_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    question_id = db.Column(db.Integer, db.ForeignKey("questions.id"), nullable=False)
+    who_response_id = db.Column(db.Integer, ForeignKey("users.id"))
+    question_id = db.Column(db.Integer, ForeignKey("questions.id"))
     text_answer = db.Column(db.String(200))
     votes = db.Column(db.Integer, default=0)
 
 
 class Votes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    answer_id = db.Column(db.Integer, db.ForeignKey("answers.id"), nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey("users.id"))
+    answer_id = db.Column(db.Integer, ForeignKey("answers.id"))
