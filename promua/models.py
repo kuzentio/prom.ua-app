@@ -30,6 +30,7 @@ class Users(db.Model):
 
 
 class Questions(db.Model):
+    __tablename__ = 'questions'
     id = db.Column(db.Integer, primary_key=True)
     who_ask_id = db.Column(db.Integer, ForeignKey("users.id"))
     text_question = db.Column(db.String(100))
