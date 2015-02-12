@@ -23,8 +23,8 @@ def main():
             db.session.add(question)
             db.session.commit()
             return redirect('/')
-        return render_template("main.html", questions=questions, user_active=True)
-    return render_template("main.html", questions=questions, user_active=False)
+        return render_template("main.html", questions=questions, user=current_user)
+    return render_template("main.html", questions=questions, user=current_user)
 
 
 @app.route('/question/<int:question_id>/', methods=['GET', 'POST'])
@@ -99,7 +99,7 @@ def registration():
 
         return redirect('/')
 
-    return render_template("registration.html", form=form, errors=errors)
+    return render_template("registration.html", form=form, errors=errors, user=current_user)
 
 
 @app.route('/auth/', methods=['GET', 'POST'])
@@ -114,7 +114,7 @@ def authorization():
 
         return redirect('/')
 
-    return render_template("auth.html", form=form, errors=errors)
+    return render_template("auth.html", form=form, errors=errors, user=current_user)
 
 
 @app.route('/exit/', methods=['GET', 'POST'])

@@ -1,12 +1,39 @@
-<!DOCTYPE html>
 <html>
-<head lang="en">
+<head>
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="/static/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    {% block title %}{% endblock %}
+    <div class="container">
+        <div class="navbar navbar-default">
+            {% block name_page %}{% endblock %}
+        </div>
+    <div class="list-group-item-heading">
+        {% block content %}{% endblock %}
+    </div>
 
+        {% block make_answer %}{% endblock %}
+
+    {% if not user.is_authenticated() %}
+
+       <form method="GET" action="/registration/" id="make_registration">
+            <input class="btn btn-success" type="submit" value="Registration">
+       </form>
+        <form method="GET" action="/auth/" id="make_authorization">
+            <input class="btn btn-default" type="submit" value="Authorization">
+       </form>
+
+    {% else %}
+
+    {% block make_question %}{% endblock %}
+        <form method="GET" action="/exit/">
+            <button class="btn btn-primary" type="submit"> Exit</button>
+        </form>
+
+    {% endif %}
 </body>
+
 </html>
