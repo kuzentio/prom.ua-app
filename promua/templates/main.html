@@ -1,39 +1,21 @@
-<html>
-<head>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="/static/jquery.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <meta charset="UTF-8">
-    <title>
-        Main Page.
-    </title>
-</head>
-<body>
-    <p>Main Page</p>
-    {% for question in questions %}
-        <li>{{question.Users.username}} : <a href="/question/{{ question.Questions.id }}/">{{question.Questions.text_question}} </a></li>
-    {% endfor %}
-        <br>
+{% extends 'base.html' %}
+    {% block title %}
+        Welcome to my simple forum
+    {% endblock %}
 
-    {% if not user_active %}
-       <form method="GET" action="/registration/">
-            <input type="submit" value="Registration">
-       </form>
-        <form method="GET" action="/auth/">
-            <input type="submit" value="Authorization">
-       </form>
-    {% endif %}
+    {% block name_page %}
+        <p class="lead">Main Page</p>
+    {% endblock %}
 
-    {% if user_active %}
+    {% block content %}
+        {% for question in questions %}
+            <li>{{question.Users.username}} : <a href="/question/{{ question.Questions.id }}/">{{question.Questions.text_question}} </a></li>
+        {% endfor %}
+    {% endblock %}
+
+    {% block make_question %}
         <form method="POST">
-            <p>Make question - </p>
-            <input type="text" name="question">
-            <input type="submit">
+            Ask - <input type="text" name="question">
+            <button class="btn btn-default" type="submit">Send</button>
         </form>
-        <form method="GET" action="/exit/">
-            <input type="submit" value="Exit">
-        </form>
-    {% endif %}
-
-</body>
-</html>
+    {% endblock %}

@@ -1,28 +1,30 @@
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet", media="screen">
-    <script type="text/javascript" src="/static/jquery.min.js"> </script>
-    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <p> Authorization </p>
-    <form method="POST">
-        {% for field in form %}
-            <br>{{ field.label }} : {{ field }}
-        {% endfor %}
+{% extends 'base.html' %}
 
-        <br>
+    {% block title %}
+        Welcome to my simple forum
+    {% endblock %}
 
-        {% for key, value in errors.items() %}
-            {{ key }} : {{ value }}
+    {% block name_page %}
+        <p class="lead">Authorization</p>
+    {% endblock %}
+
+    {% block content %}
+        <script src="/static/hide_authorization_button.js"></script>
+
+        <form method="POST">
+            {% for field in form %}
+                <p>{{ field.label }} : {{ field }}</p>
+            {% endfor %}
+            <input class="btn btn-default" type="submit">
+        </form>
+
+            {% for key, value in errors.items() %}
+                {{ key }} : {{ value }}
                 {% if key == 'username'%}
                     <a href="/registration/"> registration</a><br>
                 {%endif%}
-        {% endfor %}
+            {% endfor %}
+    {% endblock %}
 
-        <input type="submit">
-    </form>
 </body>
 </html>
